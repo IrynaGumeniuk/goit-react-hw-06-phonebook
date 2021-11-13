@@ -1,15 +1,37 @@
-import { createStore } from "redux";
-import rootReducer from "./rootReducer";
+import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
+import {
+  persistStore,
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from "redux-persist";
+import storage from "redux-persist/lib/storage";
+import contactReducer from "./reducers";
 
-const contactReducer = [
-  { id: "id-1", name: "Rosie Simpson", number: "459-12-56" },
-  { id: "id-2", name: "Hermione Kline", number: "443-89-12" },
-  { id: "id-3", name: "Eden Clements", number: "645-17-79" },
-  { id: "id-4", name: "Annie Copeland", number: "227-91-26" },
-];
+const contactsPersistConfig = {
+  key: "contacts",
+  storage,
+  blacklist: ["filter"],
+};
 
-export const store = createStore(
-  rootReducer,
-  { contactRoot: { contactReducer } },
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-);
+const store = configureStore({
+  reducer: {
+    contacts: persistReducer(contactsPersistConfig, contactReducer),
+  },
+  middleware: getDefaultMiddleware({
+    serializableCheck: {
+      ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+    },
+  }),
+  devTools: process.env.NODE_ENV !== "production",
+});
+
+const persistor = persistStore(store);
+
+const persistore = { store, persistor };
+
+export default persistore;
