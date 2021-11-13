@@ -1,13 +1,4 @@
-.item {
-  padding: 5px;
-}
-
-.btn {
-  padding: 3px 7px;
-  margin-left: 15px;
-}
-
-.btn:hover {
-  background: cadetblue;
-  color: #fff;
+.btnDelete {
+    margin-left: 10px;
+    margin-bottom: 5px;
 }

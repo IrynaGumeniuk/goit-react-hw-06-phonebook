@@ -1,42 +1,45 @@
-import {useState} from "react";
-import PropTypes from 'prop-types';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import contactsAction from "../redux/contacts/contactsAction";
 import styles from "./Phonebook.module.css";
 
-export default function Phonebook ({onSubmit}) {
+class Phonebook extends Component {
+  state = {
+    contactName: "",
+    number: "",
+  };
 
-  const [name, setName] = useState("");
-  const [number, setNumber] = useState("");
+  handleChange = ({ target }) => {
+    const { name, value } = target;
+    this.setState({ [name]: value });
+  };
 
-  const handleSubmit = e => {
+  handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit({name,number});
-    formReset();
+    const { contactName, number } = this.state;
+    const { addContact } = this.props;
+
+    this.setState({
+      contactName: "",
+      number: "",
+    });
+    addContact(contactName, number);
   };
 
-  const formReset = () => {
-    setName('');
-    setNumber('');
-  };
-
-  const handleChangeName = (e) => {
-    setName(e.target.value);  
-  };
-
-  const handleChangeNumber = (e) => {
-    setNumber(e.target.value);  
-  };
-
+  render() {
+    // console.log(this.props);
+    const { contactName, number } = this.state;
 
     return (
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={this.handleSubmit} style={{ marginLeft: "30px" }}>
         <h2>Phonebook</h2>
 
         <input
           className={styles.inputName}
           type="text"
-          name="name"
-          value={name}
-          onChange={handleChangeName}
+          name="contactName"
+          value={contactName}
+          onChange={this.handleChange}
           placeholder="Enter name..."
           required
         ></input>
@@ -46,16 +49,20 @@ export default function Phonebook ({onSubmit}) {
           type="tel"
           name="number"
           value={number}
-          onChange={handleChangeNumber}
+          onChange={this.handleChange}
           placeholder="Number..."
           required
         ></input>
 
-        <button type="submit" onSubmit={handleSubmit} className={styles.btn}>Add contact</button>
+        <button type="submit">Add contact</button>
       </form>
     );
   }
+}
 
-  Phonebook.propTypes = {
-    handleSubmit: PropTypes.func.isRequired,
-        };
+const mapDispatchToProps = (dispatch) => ({
+  addContact: (name, number) =>
+    dispatch(contactsAction.addContact(name, number)),
+});
+
+export default connect(null, mapDispatchToProps)(Phonebook);
