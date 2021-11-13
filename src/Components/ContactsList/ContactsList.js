@@ -35,6 +35,7 @@ const ContactList = () => {
     </table>
   );
 };
+
 ContactList.propTypes = {
   contacts: PropTypes.arrayOf(
     PropTypes.shape({
