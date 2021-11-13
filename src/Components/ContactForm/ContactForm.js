@@ -35,26 +35,32 @@ function ContactForm() {
   return (
     <form className={s.Form} onSubmit={handleSubmit}>
       <label className={s.FormLabel}>
-        Name
         <input
           className={s.FormInput}
           type="text"
           name="name"
           value={name}
           onChange={handleInputChange}
-        />
+          placeholder="Enter name..."
+          required
+        ></input>
+
+
       </label>
       <label className={s.FormLabel}>
-        Number
+
         <input
           className={s.FormInput}
-          type="text"
+          type="tel"
           name="number"
           value={number}
           onChange={handleInputChange}
-        />
+          placeholder="Number..."
+          required
+        ></input>
+
       </label>
-      <button type="submit">Add contact</button>
+      <button type="submit" className={s.btn}>Add contact</button>
     </form>
   );
 }
